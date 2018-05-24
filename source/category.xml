@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.jdt.launching.bug385738-4.7.2_2.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.7.2" version="2.0.0" patch="true">
+      <category name="eclipse 4.7.2 (Oxygen.2)"/>
+   </feature>
+   <category-def name="eclipse 4.7.2 (Oxygen.2)" label="eclipse 4.7.2 (Oxygen.2)"/>
+</site>
