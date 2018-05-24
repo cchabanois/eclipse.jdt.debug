@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2017 IBM Corporation and others.
+ * Copyright (c) 2000, 2018 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *     BEA - Daniel R Somerfield - Bug 88939
+ *     Axel Richard (Obeo) - Bug 41353 - Launch configurations prototypes
  *******************************************************************************/
 package org.eclipse.jdt.debug.ui.launchConfigurations;
 
@@ -23,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.jdt.internal.debug.ui.IJavaDebugHelpContextIds;
 import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.internal.debug.ui.JavaDebugImages;
@@ -56,6 +58,8 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -90,11 +94,13 @@ public class JavaClasspathTab extends AbstractJavaClasspathTab {
 	 * The last launch config this tab was initialized from
 	 */
 	protected ILaunchConfiguration fLaunchConfiguration;
+	private Button fUseClasspathOnlyJarButton;
 
 	/**
 	 * Constructor
 	 */
 	public JavaClasspathTab() {
+		super();
 		setHelpContextId(IJavaDebugHelpContextIds.LAUNCH_CONFIGURATION_DIALOG_CLASSPATH_TAB);
 	}
 
@@ -138,6 +144,14 @@ public class JavaClasspathTab extends AbstractJavaClasspathTab {
 		pathButtonComp.setFont(font);
 
 		createPathButtons(pathButtonComp);
+		fUseClasspathOnlyJarButton = SWTFactory.createCheckButton(comp, LauncherMessages.VMArgumentsBlock_1, null, false, 1);
+		fUseClasspathOnlyJarButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setDirty(true);
+				updateLaunchConfigurationDialog();
+			}
+		});
 	}
 
 	/**
@@ -209,6 +223,10 @@ public class JavaClasspathTab extends AbstractJavaClasspathTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		refresh(configuration);
 		fClasspathViewer.getTreeViewer().expandToLevel(2);
+		try {
+			fUseClasspathOnlyJarButton.setSelection(configuration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_USE_CLASSPATH_ONLY_JAR, false));
+		} catch (CoreException e) {
+		}
 	}
 
 	/* (non-Javadoc)
@@ -290,6 +308,7 @@ public class JavaClasspathTab extends AbstractJavaClasspathTab {
 					JDIDebugUIPlugin.statusDialog(LauncherMessages.JavaClasspathTab_Unable_to_save_classpath_1, e.getStatus());
 				}
 			}
+			configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_USE_CLASSPATH_ONLY_JAR, fUseClasspathOnlyJarButton.getSelection());
 		}
 	}
 
@@ -498,4 +517,5 @@ public class JavaClasspathTab extends AbstractJavaClasspathTab {
 	protected ClasspathModel getModel() {
 		return fModel;
 	}
+
 }
