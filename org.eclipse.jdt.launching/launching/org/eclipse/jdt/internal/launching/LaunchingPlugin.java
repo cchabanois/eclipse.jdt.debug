@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -102,6 +103,11 @@ public class LaunchingPlugin extends Plugin implements DebugOptionsListener, IEc
 
 	public static final String DEBUG_JRE_CONTAINER_FLAG = "org.eclipse.jdt.launching/debug/classpath/jreContainer"; //$NON-NLS-1$
 	public static final String DEBUG_FLAG = "org.eclipse.jdt.launching/debug"; //$NON-NLS-1$
+
+	/**
+	 * list of temp files for the launch (separated by the path separator char)
+	 */
+	public static final String ATTR_LAUNCH_TEMP_FILES = "tempFiles"; //$NON-NLS-1$
 
 	/**
 	 * The {@link DebugTrace} object to print to OSGi tracing
@@ -1178,9 +1184,23 @@ public class LaunchingPlugin extends Plugin implements DebugOptionsListener, IEc
 				Object source = event.getSource();
 				if (source instanceof IDebugTarget || source instanceof IProcess) {
 					ArchiveSourceLocation.closeArchives();
+					IProcess process;
+					if (source instanceof IProcess) {
+						process = (IProcess) source;
+					} else {
+						process = ((IDebugTarget) source).getProcess();
+					}
+					deleteProcessTempFiles(process);
 				}
 			}
 		}
+	}
+
+	private void deleteProcessTempFiles(IProcess process) {
+		if (process.getAttribute(ATTR_LAUNCH_TEMP_FILES) == null) {
+			return;
+		}
+		Arrays.stream(process.getAttribute(ATTR_LAUNCH_TEMP_FILES).split(File.pathSeparator)).map(path -> new File(path)).forEach(file -> file.delete());
 	}
 
 	/**
