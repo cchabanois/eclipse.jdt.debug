@@ -13,6 +13,7 @@ package org.eclipse.jdt.internal.launching;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -86,8 +87,7 @@ public class Standard11xVMRunner extends StandardVMRunner {
 		int cpidx = -1;
 		if (combinedPath.length > 0) {
 			cpidx = arguments.size();
-			arguments.add("-classpath"); //$NON-NLS-1$
-			arguments.add(convertClassPath(combinedPath));
+			arguments.addAll(Arrays.asList(getClassPathArguments(config, launch, combinedPath)));
 		}
 		arguments.add(config.getClassToLaunch());
 
@@ -137,6 +137,9 @@ public class Standard11xVMRunner extends StandardVMRunner {
 		process.setAttribute(DebugPlugin.ATTR_LAUNCH_TIMESTAMP, ltime != null ? ltime : timestamp);
 		if(workingDir != null) {
 			process.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDir.getAbsolutePath());
+		}
+		if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR) != null) {
+			process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR));
 		}
 		subMonitor.worked(1);
 	}
