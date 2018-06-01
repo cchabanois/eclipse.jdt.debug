@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.IStatusHandler;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.core.JavaCore;
@@ -329,21 +330,45 @@ public class StandardVMRunner extends AbstractVMRunner {
 		return buf.toString();
 	}
 
+	/**
+	 * Get the arguments for the classpath. If classpath is too long, we use an argument file or a classpath-only jar
+	 *
+	 * @param config
+	 * @param launch
+	 * @param cp
+	 * @return the arguments to use to pass the classpath to java
+	 */
 	protected String[] getClassPathArguments(VMRunnerConfiguration config, ILaunch launch, String[] cp) {
 		String classPath = convertClassPath(cp);
-		if (classPath.length() > getMaxClasspathParameterLength()) {
-			try {
+		try {
+			boolean useClasspathOnlyJar = launch.getLaunchConfiguration().getAttribute(IJavaLaunchConfigurationConstants.ATTR_USE_CLASSPATH_ONLY_JAR, false);
+			boolean useClasspathArgumentFile = false;
+
+			if (!useClasspathOnlyJar && classPath.length() > getMaxClasspathParameterLength()) {
 				if (!isArgumentFileSupported(fVMInstance)) {
-					File classpathOnlyJar = createClasspathOnlyJar(config, launch, cp);
-					launch.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, classpathOnlyJar.getAbsolutePath());
-					return new String[] { "-classpath", classpathOnlyJar.getAbsolutePath() }; //$NON-NLS-1$
+					IStatus status = new Status(IStatus.ERROR, LaunchingPlugin.getUniqueIdentifier(), IJavaLaunchConfigurationConstants.ERR_CLASSPATH_TOO_LONG, "", null); //$NON-NLS-1$
+					IStatusHandler handler = DebugPlugin.getDefault().getStatusHandler(status);
+					if (handler != null) {
+						Object result = handler.handleStatus(status, launch);
+						if (result instanceof Boolean) {
+							useClasspathOnlyJar = (boolean) result;
+						}
+					}
+				} else {
+					useClasspathArgumentFile = true;
 				}
+			}
+			if (useClasspathOnlyJar) {
+				File classpathOnlyJar = createClasspathOnlyJar(config, launch, cp);
+				launch.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE, classpathOnlyJar.getAbsolutePath());
+				return new String[] { "-classpath", classpathOnlyJar.getAbsolutePath() }; //$NON-NLS-1$
+			}
+			if (useClasspathArgumentFile) {
 				File file = createClassPathArgumentFile(config, launch, classPath);
 				return new String[] { '@' + file.getAbsolutePath() };
 			}
-			catch (CoreException e) {
-				LaunchingPlugin.log(e.getStatus());
-			}
+		} catch (CoreException e) {
+			LaunchingPlugin.log(e.getStatus());
 		}
 		return new String[] { "-classpath", classPath }; //$NON-NLS-1$
 
@@ -372,6 +397,7 @@ public class StandardVMRunner extends AbstractVMRunner {
 			byte[] bytes = ("-classpath " + classPath).getBytes(StandardCharsets.UTF_8); //$NON-NLS-1$
 
 			Files.write(classPathFile.toPath(), bytes);
+			launch.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE, classPathFile.getAbsolutePath());
 			return classPathFile;
 		} catch (CoreException | IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR, LaunchingPlugin.getUniqueIdentifier(), IStatus.ERROR, "Cannot create classpath argument file", e)); //$NON-NLS-1$
@@ -418,7 +444,7 @@ public class StandardVMRunner extends AbstractVMRunner {
 			try (JarOutputStream target = new JarOutputStream(new FileOutputStream(jarFile), manifest)) {
 			}
 
-			launch.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, jarFile.getAbsolutePath());
+			launch.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE, jarFile.getAbsolutePath());
 			return jarFile;
 		} catch (CoreException | IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR, LaunchingPlugin.getUniqueIdentifier(), IStatus.ERROR, "Cannot create classpath only jar", e)); // $NON-NLS-1$ //$NON-NLS-1$
@@ -569,8 +595,8 @@ public class StandardVMRunner extends AbstractVMRunner {
 			}
 			process.setAttribute(DebugPlugin.ATTR_ENVIRONMENT, buff.toString());
 		}
-		if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR) != null) {
-			process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR));
+		if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE) != null) {
+			process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE));
 		}
 		subMonitor.worked(1);
 		subMonitor.done();

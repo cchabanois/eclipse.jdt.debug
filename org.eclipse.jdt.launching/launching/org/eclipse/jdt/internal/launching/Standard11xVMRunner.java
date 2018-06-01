@@ -138,8 +138,8 @@ public class Standard11xVMRunner extends StandardVMRunner {
 		if(workingDir != null) {
 			process.setAttribute(DebugPlugin.ATTR_WORKING_DIRECTORY, workingDir.getAbsolutePath());
 		}
-		if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR) != null) {
-			process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR));
+		if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE) != null) {
+			process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE));
 		}
 		subMonitor.worked(1);
 	}

@@ -103,7 +103,10 @@ public class LaunchingPlugin extends Plugin implements DebugOptionsListener, IEc
 	public static final String DEBUG_JRE_CONTAINER_FLAG = "org.eclipse.jdt.launching/debug/classpath/jreContainer"; //$NON-NLS-1$
 	public static final String DEBUG_FLAG = "org.eclipse.jdt.launching/debug"; //$NON-NLS-1$
 
-	public static final String ATTR_CLASSPATH_ONLY_JAR = "classpathOnlyJar"; //$NON-NLS-1$
+	/**
+	 * Path to the classpath file (either a classpath argument file or classpath-only jar file)
+	 */
+	public static final String ATTR_CLASSPATH_FILE = "classpathFile"; //$NON-NLS-1$
 
 	/**
 	 * The {@link DebugTrace} object to print to OSGi tracing
@@ -1186,8 +1189,8 @@ public class LaunchingPlugin extends Plugin implements DebugOptionsListener, IEc
 					} else {
 						process = ((IDebugTarget) source).getProcess();
 					}
-					if (process.getAttribute(ATTR_CLASSPATH_ONLY_JAR) != null) {
-						File classpathOnlyJarFile = new File(process.getAttribute(ATTR_CLASSPATH_ONLY_JAR));
+					if (process.getAttribute(ATTR_CLASSPATH_FILE) != null) {
+						File classpathOnlyJarFile = new File(process.getAttribute(ATTR_CLASSPATH_FILE));
 						classpathOnlyJarFile.delete();
 					}
 				}

@@ -322,8 +322,8 @@ public class StandardVMDebugger extends StandardVMRunner {
 					}
 					process.setAttribute(DebugPlugin.ATTR_ENVIRONMENT, buff.toString());
 				}
-				if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR) != null) {
-					process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR));
+				if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE) != null) {
+					process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_FILE));
 				}
 				subMonitor.worked(1);
 				subMonitor.subTask(LaunchingMessages.StandardVMDebugger_Establishing_debug_connection____5);
