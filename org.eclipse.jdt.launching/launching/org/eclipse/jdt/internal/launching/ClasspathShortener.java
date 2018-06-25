@@ -246,7 +246,8 @@ public class ClasspathShortener {
 				// on MacOs, ARG_MAX is 262144
 				return ARG_MAX_MACOS - getEnvpSize() - 2048;
 			case Platform.OS_WIN32:
-				// 32767 on Windows : see http://msdn.microsoft.com/en-us/library/windows/desktop/ms682425(v=vs.85).aspx
+				// On Windows, the maximum length of the command line is 32,768 characters, including the Unicode terminating null character.
+				// see http://msdn.microsoft.com/en-us/library/windows/desktop/ms682425(v=vs.85).aspx
 				return ARG_MAX_WINDOWS - 2048;
 			default:
 				return Integer.MAX_VALUE;
@@ -255,6 +256,8 @@ public class ClasspathShortener {
 
 	protected int getMaxArgLength() {
 		if (os.equals(Platform.OS_LINUX)) {
+			// On Linux, MAX_ARG_STRLEN (kernel >= 2.6.23) is the maximum length of a command line argument (or environment variable). Its value
+			// cannot be changed without recompiling the kernel.
 			return MAX_ARG_STRLEN_LINUX - 2048;
 		}
 		return Integer.MAX_VALUE;
