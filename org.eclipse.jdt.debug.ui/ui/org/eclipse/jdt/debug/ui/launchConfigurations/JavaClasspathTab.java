@@ -160,7 +160,8 @@ public class JavaClasspathTab extends AbstractJavaClasspathTab {
 		fUseClasspathOnlyJarButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				scheduleUpdateJob();
+				setDirty(true);
+				updateLaunchConfigurationDialog();
 			}
 		});
 	}
