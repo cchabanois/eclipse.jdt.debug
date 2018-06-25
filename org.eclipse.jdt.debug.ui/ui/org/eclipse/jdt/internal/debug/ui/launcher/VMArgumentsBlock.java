@@ -44,7 +44,6 @@ public class VMArgumentsBlock extends JavaLaunchTab {
 	// VM arguments widgets
 	protected Text fVMArgumentsText;
 	private Button fUseStartOnFirstThread = null;
-	private Button fUseClasspathOnlyJar = null;
 	private Button fPgrmArgVariableButton;
 
 	/**
@@ -124,13 +123,6 @@ public class VMArgumentsBlock extends JavaLaunchTab {
 				}
 			});
 		}
-		fUseClasspathOnlyJar = SWTFactory.createCheckButton(group, LauncherMessages.VMArgumentsBlock_1, null, false, 1);
-		fUseClasspathOnlyJar.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				scheduleUpdateJob();
-			}
-		});
 	}
 
 	/**
@@ -152,9 +144,6 @@ public class VMArgumentsBlock extends JavaLaunchTab {
 			if(fUseStartOnFirstThread != null) {
 				fUseStartOnFirstThread.setSelection(configuration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_USE_START_ON_FIRST_THREAD, true));
 			}
-			if (fUseClasspathOnlyJar != null) {
-				fUseClasspathOnlyJar.setSelection(configuration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_USE_CLASSPATH_ONLY_JAR, false));
-			}
 		} catch (CoreException e) {
 			setErrorMessage(LauncherMessages.JavaArgumentsTab_Exception_occurred_reading_configuration___15 + e.getStatus().getMessage());
 			JDIDebugUIPlugin.log(e);
@@ -170,7 +159,6 @@ public class VMArgumentsBlock extends JavaLaunchTab {
 		if(fUseStartOnFirstThread != null) {
 			configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_USE_START_ON_FIRST_THREAD, fUseStartOnFirstThread.getSelection());
 		}
-		configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_USE_CLASSPATH_ONLY_JAR, fUseClasspathOnlyJar.getSelection());
 	}
 
 	/**
