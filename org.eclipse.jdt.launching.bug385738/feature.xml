@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.jdt.launching.bug385738-4.8.0RC4a"
+      label="jdt launching plugin with long classpath support for Eclipse 4.8.0RC4a"
+      version="3.0.0">
+
+   <description url="https://github.com/cchabanois/eclipse.jdt.debug">
+      Contains a patched eclipse.jdt.launching plugin :
+It shorten the classpath/modulepath if necessary.
+Depending on the java version, os and launch configuration, the classpath argument will be replaced by an argument file, a classpath-only jar or env variable. 
+The modulepath is replaced by an argument file if necessary.
+   </description>
+
+   <copyright>
+      (c) Copyright Eclipse contributors and others 2000, 2017.  All rights reserved.
+Visit http://www.eclipse.org/eclipse
+   </copyright>
+
+   <license url="license.html">
+      This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.jdt" version="3.14.0.v20180611-0500" patch="true"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.jdt.launching"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jdt.debug.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
