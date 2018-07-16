@@ -1,5 +1,6 @@
 This p2 repository contains a feature patch for https://bugs.eclipse.org/bugs/show_bug.cgi?id=385738 : Launching command line exceeds the process creation command limit on Linux and MacOs. 
-This patch will be contributed to Eclipse when ready.
+This patch has been contributed to Eclipse : http://git.eclipse.org/c/jdt/eclipse.jdt.debug.git/commit/?id=adc7d59a94a218a87318d0c800d57a84b1c347f8
+However target milestone is 4.9M2, so this repository contains backports to 4.7 and 4.8 versions.
 
 # Install it
 Add the update site url to your eclipse installation : https://raw.githubusercontent.com/cchabanois/eclipse.jdt.debug/repository-fix-385738/p2 
@@ -8,13 +9,15 @@ The patch is available for :
 * eclipse 4.7.2
 * eclipse 4.7.3
 * eclipse 4.7.3a
+* eclipse 4.8.0
 
 # Code for the fix
 Branches :
-* for 4.8 dev version : fix_385738_master
+* for 4.9 dev version : master (fix has been committed) or fix_385738_master
 * for 4.7.2 : fix_385738_R4_7_2
 * for 4.7.3 : fix_385738_R4_7_3
 * for 4.7.3a : fix_385738_R4_7_3a
+* for 4.8.0 : fix_385738_R4_8
 
 # Updating P2 repository
 To update the p2 repository :
