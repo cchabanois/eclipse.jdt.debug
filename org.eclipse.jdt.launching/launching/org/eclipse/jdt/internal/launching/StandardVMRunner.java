@@ -12,11 +12,7 @@ package org.eclipse.jdt.internal.launching;
 
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,25 +20,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.jar.Attributes;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.launching.AbstractVMInstall;
 import org.eclipse.jdt.launching.AbstractVMRunner;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -314,12 +302,12 @@ public class StandardVMRunner extends AbstractVMRunner {
 	}
 
 	protected String convertClassPath(String[] cp) {
-		int pathCount = 0;
-		StringBuffer buf = new StringBuffer();
+		int pathCount= 0;
+		StringBuffer buf= new StringBuffer();
 		if (cp.length == 0) {
-			return ""; //$NON-NLS-1$
+			return "";    //$NON-NLS-1$
 		}
-		for (int i = 0; i < cp.length; i++) {
+		for (int i= 0; i < cp.length; i++) {
 			if (pathCount > 0) {
 				buf.append(File.pathSeparator);
 			}
@@ -327,102 +315,6 @@ public class StandardVMRunner extends AbstractVMRunner {
 			pathCount++;
 		}
 		return buf.toString();
-	}
-
-	protected String[] getClassPathArguments(VMRunnerConfiguration config, ILaunch launch, String[] cp) {
-		String classPath = convertClassPath(cp);
-		if (classPath.length() > getMaxClasspathParameterLength()) {
-			try {
-				if (!isArgumentFileSupported(fVMInstance)) {
-					File classpathOnlyJar = createClasspathOnlyJar(config, launch, cp);
-					launch.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, classpathOnlyJar.getAbsolutePath());
-					return new String[] { "-classpath", classpathOnlyJar.getAbsolutePath() }; //$NON-NLS-1$
-				}
-				File file = createClassPathArgumentFile(config, launch, classPath);
-				return new String[] { '@' + file.getAbsolutePath() };
-			}
-			catch (CoreException e) {
-				LaunchingPlugin.log(e.getStatus());
-			}
-		}
-		return new String[] { "-classpath", classPath }; //$NON-NLS-1$
-
-	}
-
-	private boolean isArgumentFileSupported(IVMInstall vmInstall) {
-		if (vmInstall instanceof AbstractVMInstall) {
-			AbstractVMInstall install = (AbstractVMInstall) vmInstall;
-			String vmver = install.getJavaVersion();
-			if (JavaCore.compareJavaVersions(vmver, JavaCore.VERSION_9) >= 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private File createClassPathArgumentFile(VMRunnerConfiguration config, ILaunch launch, String classPath) throws CoreException {
-		try {
-			File workingDir = getWorkingDir(config);
-			String timeStamp = launch.getAttribute(DebugPlugin.ATTR_LAUNCH_TIMESTAMP);
-			if (timeStamp == null) {
-				timeStamp = Long.toString(System.currentTimeMillis());
-			}
-			File classPathFile = new File(workingDir, String.format(".%s-classpath-arg-%s.txt", launch.getLaunchConfiguration().getName(), timeStamp)); //$NON-NLS-1$
-
-			byte[] bytes = ("-classpath " + classPath).getBytes(StandardCharsets.UTF_8); //$NON-NLS-1$
-
-			Files.write(classPathFile.toPath(), bytes);
-			return classPathFile;
-		} catch (CoreException | IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, LaunchingPlugin.getUniqueIdentifier(), IStatus.ERROR, "Cannot create classpath argument file", e)); //$NON-NLS-1$
-		}
-	}
-
-	private int getMaxClasspathParameterLength() {
-		switch (Platform.getOS()) {
-			case Platform.OS_LINUX:
-				// on Linux, one argument (or env var) must not be longer than MAX_ARG_STRLEN which is hard-coded to be 131072
-				return 131072;
-			case Platform.OS_MACOSX:
-				// on MacOs, ARG_MAX is 262144. We leave some space for other parameters
-				return 230000;
-			default:
-				// on Windows, we use CLASSPATH env variable if classpath is too big
-				return Integer.MAX_VALUE;
-		}
-	}
-
-	private File createClasspathOnlyJar(VMRunnerConfiguration config, ILaunch launch, String[] classpath) throws CoreException {
-		try {
-			File workingDir = getWorkingDir(config);
-
-			String timeStamp = launch.getAttribute(DebugPlugin.ATTR_LAUNCH_TIMESTAMP);
-			if (timeStamp == null) {
-				timeStamp = Long.toString(System.currentTimeMillis());
-			}
-			File jarFile = new File(workingDir, String.format(".%s-classpathOnly-%s.jar", launch.getLaunchConfiguration().getName(), timeStamp)); //$NON-NLS-1$
-			// $NON-NLS-1$
-			URI workingDirUri = workingDir.toURI();
-			StringBuilder manifestClasspath = new StringBuilder();
-			for (int i = 0; i < classpath.length; i++) {
-				if (i != 0) {
-					manifestClasspath.append(' ');
-				}
-				File file = new File(classpath[i]);
-				URI relUri = URIUtil.makeRelative(file.toURI(), workingDirUri);
-				manifestClasspath.append(relUri);
-			}
-			Manifest manifest = new Manifest();
-			manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0"); //$NON-NLS-1$
-			manifest.getMainAttributes().put(Attributes.Name.CLASS_PATH, manifestClasspath.toString());
-			try (JarOutputStream target = new JarOutputStream(new FileOutputStream(jarFile), manifest)) {
-			}
-
-			launch.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, jarFile.getAbsolutePath());
-			return jarFile;
-		} catch (CoreException | IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, LaunchingPlugin.getUniqueIdentifier(), IStatus.ERROR, "Cannot create classpath only jar", e)); // $NON-NLS-1$ //$NON-NLS-1$
-		}
 	}
 
 	/**
@@ -491,7 +383,8 @@ public class StandardVMRunner extends AbstractVMRunner {
 		int cpidx = -1;
 		if (cp.length > 0) {
 			cpidx = arguments.size();
-			arguments.addAll(Arrays.asList(getClassPathArguments(config, launch, cp)));
+			arguments.add("-classpath"); //$NON-NLS-1$
+			arguments.add(convertClassPath(cp));
 		}
 
 		if (isModular(config, fVMInstance)) {
@@ -559,9 +452,6 @@ public class StandardVMRunner extends AbstractVMRunner {
 				}
 			}
 			process.setAttribute(DebugPlugin.ATTR_ENVIRONMENT, buff.toString());
-		}
-		if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR) != null) {
-			process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR));
 		}
 		subMonitor.worked(1);
 		subMonitor.done();

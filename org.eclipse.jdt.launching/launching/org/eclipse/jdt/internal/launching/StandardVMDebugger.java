@@ -219,7 +219,8 @@ public class StandardVMDebugger extends StandardVMRunner {
 		int cpidx = -1;
 		if (cp.length > 0) {
 			cpidx = arguments.size();
-			arguments.addAll(Arrays.asList(getClassPathArguments(config, launch, cp)));
+			arguments.add("-classpath"); //$NON-NLS-1$
+			arguments.add(convertClassPath(cp));
 		}
 
 		if (isModular(config, fVMInstance)) {
@@ -311,9 +312,6 @@ public class StandardVMDebugger extends StandardVMRunner {
 						}
 					}
 					process.setAttribute(DebugPlugin.ATTR_ENVIRONMENT, buff.toString());
-				}
-				if (launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR) != null) {
-					process.setAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR, launch.getAttribute(LaunchingPlugin.ATTR_CLASSPATH_ONLY_JAR));
 				}
 				subMonitor.worked(1);
 				subMonitor.subTask(LaunchingMessages.StandardVMDebugger_Establishing_debug_connection____5);
