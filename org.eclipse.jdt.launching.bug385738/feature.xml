@@ -2,13 +2,15 @@
 <feature
       id="org.eclipse.jdt.launching.bug385738-4.7.2"
       label="jdt launching plugin with long classpath support for Eclipse 4.7.2"
-      version="2.0.0">
+      version="5.0.0">
 
-   <description url="https://git.soma.salesforce.com/cchabanois/eclipse.jdt.debug">
+   <description url="https://github.com/cchabanois/eclipse.jdt.debug">
       Contains a patched eclipse.jdt.launching plugin :
-It creates a classpath only jar on Linux when classpath is longer than 131072 (MAX_ARG_STRLEN). This jar is created on the working directory and deleted when process terminates.
-
-MAX_ARG_STRLEN (kernel &gt;= 2.6.23) is the maximum length of a command line argument (or environment variable) and its value is 131072 and cannot be changed without recompiling the kernel.
+It shorten the classpath/modulepath if necessary.
+Depending on the java version, os and launch configuration, the
+classpath argument will be replaced by an argument file, a classpath-only
+jar or env variable. 
+The modulepath is replaced by an argument file if necessary.
    </description>
 
    <copyright>
@@ -26,6 +28,13 @@ Visit http://www.eclipse.org/eclipse
 
    <plugin
          id="org.eclipse.jdt.launching"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.debug.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
