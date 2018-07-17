@@ -1180,7 +1180,9 @@ public class LaunchingPlugin extends Plugin implements DebugOptionsListener, IEc
 					} else {
 						process = ((IDebugTarget) source).getProcess();
 					}
-					deleteProcessTempFiles(process);
+					if (process != null) {
+						deleteProcessTempFiles(process);
+					}
 				}
 			}
 		}
