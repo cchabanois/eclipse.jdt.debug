@@ -34,7 +34,7 @@ Visit http://www.eclipse.org/eclipse
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.debug.ui"
+         id="org.eclipse.jdt.debug.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
