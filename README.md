@@ -7,17 +7,19 @@ Add the update site url to your eclipse installation : https://raw.githubusercon
 
 The patch is available for :
 * eclipse 4.7.2
-* eclipse 4.7.3
+* eclipse 4.7.3 (previous version of the fix : should not be used)
 * eclipse 4.7.3a
+* eclipse 4.8.0RC4 (previous version of the fix : should not be used)
 * eclipse 4.8.0
 
 # Code for the fix
 Branches :
 * for 4.9 dev version : master (fix has been committed) or fix_385738_master
-* for 4.7.2 : fix_385738_R4_7_2
-* for 4.7.3 : fix_385738_R4_7_3
-* for 4.7.3a : fix_385738_R4_7_3a
-* for 4.8.0 : fix_385738_R4_8
+* for 4.7.2 : fix_385738_R4_7_2 (backport of the fix)
+* for 4.7.3 : fix_385738_R4_7_3 (previous version of the fix. Should not be used)
+* for 4.7.3a : fix_385738_R4_7_3a (backport of the fix)
+* for 4.8.0RC4 : fix_385738_S4_8_0_RC4a (previous version of the fix. Should not be used)
+* for 4.8.0 : fix_385738_R4_8 (backport of the fix)
 
 # Updating P2 repository
 To update the p2 repository :
