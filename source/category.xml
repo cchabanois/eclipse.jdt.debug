@@ -15,6 +15,9 @@
    <feature url="features/org.eclipse.jdt.launching.bug385738-4.7.3a_2.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.7.3a" version="2.0.0" patch="true">
       <category name="eclipse 4.7.3a (Oxygen.3a)"/>
    </feature>
+   <feature url="features/org.eclipse.jdt.launching.bug385738-4.7.3a_6.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.7.3a" version="6.0.0" patch="true">
+      <category name="eclipse 4.7.3a (Oxygen.3a)"/>
+   </feature>
    <feature url="features/org.eclipse.jdt.launching.bug385738-4.8.0RC4a_3.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.8.0RC4a" version="3.0.0" patch="true">
       <category name="eclipse 4.8.0RC4a (Photon)"/>
    </feature>

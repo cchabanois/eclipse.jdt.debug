@@ -2,7 +2,7 @@
 <?artifactRepository version='1.1.0'?>
 <repository name='file:/home/cchabanois/git/eclipse.jdt.debug/p2/ - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1.0.0'>
   <properties size='2'>
-    <property name='p2.timestamp' value='1531904641263'/>
+    <property name='p2.timestamp' value='1531991042192'/>
     <property name='p2.compressed' value='false'/>
   </properties>
   <mappings size='3'>
@@ -10,12 +10,19 @@
     <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
     <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
   </mappings>
-  <artifacts size='15'>
+  <artifacts size='18'>
     <artifact classifier='osgi.bundle' id='org.eclipse.jdt.launching' version='3.9.51.201805241723'>
       <properties size='3'>
         <property name='artifact.size' value='338423'/>
         <property name='download.size' value='338423'/>
         <property name='download.md5' value='d029d590628ae6017b4cbe1b3bfc7856'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.eclipse.jdt.launching' version='3.9.100.201807191100'>
+      <properties size='3'>
+        <property name='artifact.size' value='346857'/>
+        <property name='download.size' value='346857'/>
+        <property name='download.md5' value='102aa908e6217259f7fd68791fb6e7c6'/>
       </properties>
     </artifact>
     <artifact classifier='osgi.bundle' id='org.eclipse.jdt.launching' version='3.9.52.201805251128'>
@@ -57,12 +64,27 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='org.eclipse.jdt.launching.bug385738-4.7.3a' version='6.0.0'>
+      <properties size='4'>
+        <property name='artifact.size' value='4069'/>
+        <property name='download.size' value='4069'/>
+        <property name='download.md5' value='a1ddaed2bab6073ed542423bfe938697'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
     <artifact classifier='org.eclipse.update.feature' id='org.eclipse.jdt.launching.bug385738-4.7.3a' version='2.0.0'>
       <properties size='4'>
         <property name='artifact.size' value='4152'/>
         <property name='download.size' value='4152'/>
         <property name='download.md5' value='3d70de8bcc794aa5137ba43290334986'/>
         <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.eclipse.jdt.debug.ui' version='3.8.100.201807191100'>
+      <properties size='3'>
+        <property name='artifact.size' value='1580697'/>
+        <property name='download.size' value='1580697'/>
+        <property name='download.md5' value='17f464a1ec01afe77e6ab43cb966b663'/>
       </properties>
     </artifact>
     <artifact classifier='org.eclipse.update.feature' id='org.eclipse.jdt.launching.bug385738-4.8.0RC4a' version='3.0.0'>
