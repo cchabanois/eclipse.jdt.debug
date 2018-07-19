@@ -21,8 +21,12 @@
    <feature url="features/org.eclipse.jdt.launching.bug385738-4.8.0RC4a_3.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.8.0RC4a" version="3.0.0" patch="true">
       <category name="eclipse 4.8.0RC4a (Photon)"/>
    </feature>
+   <feature url="features/org.eclipse.jdt.launching.bug385738-4.8.0_6.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.8.0" version="6.0.0" patch="true">
+      <category name="eclipse 4.8.0 (Photon)"/>
+   </feature>
    <category-def name="eclipse 4.7.2 (Oxygen.2)" label="eclipse 4.7.2 (Oxygen.2)"/>
    <category-def name="eclipse 4.7.3 (Oxygen.3)" label="eclipse 4.7.3 (Oxygen.3)"/>
    <category-def name="eclipse 4.7.3a (Oxygen.3a)" label="eclipse 4.7.3a (Oxygen.3a)"/>
    <category-def name="eclipse 4.8.0RC4a (Photon)" label="eclipse 4.8.0RC4a (Photon)"/>
+   <category-def name="eclipse 4.8.0 (Photon)" label="eclipse 4.8.0 (Photon)"/>
 </site>
