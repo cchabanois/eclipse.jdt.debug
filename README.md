@@ -18,7 +18,6 @@ Branches :
 * for 4.7.2 : fix_385738_R4_7_2 (backport of the fix)
 * for 4.7.3 : fix_385738_R4_7_3 (previous version of the fix. Should not be used)
 * for 4.7.3a : fix_385738_R4_7_3a (backport of the fix)
-* for 4.8.0RC4 : fix_385738_S4_8_0_RC4a (previous version of the fix. Should not be used)
 * for 4.8.0 : fix_385738_R4_8 (backport of the fix)
 
 # Updating P2 repository
