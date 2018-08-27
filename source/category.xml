@@ -12,6 +12,9 @@
    <feature url="features/org.eclipse.jdt.launching.bug385738-4.7.2_7.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.7.2" version="7.0.0" patch="true">
       <category name="eclipse 4.7.2 (Oxygen.2)"/>
    </feature>
+   <feature url="features/org.eclipse.jdt.launching.bug385738-4.7.2_8.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.7.2" version="8.0.0" patch="true">
+      <category name="eclipse 4.7.2 (Oxygen.2)"/>
+   </feature>
    <feature url="features/org.eclipse.jdt.launching.bug385738-4.7.3a_2.0.0.jar" id="org.eclipse.jdt.launching.bug385738-4.7.3a" version="2.0.0" patch="true">
       <category name="eclipse 4.7.3a (Oxygen.3a)"/>
    </feature>
