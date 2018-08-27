@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.jdt.launching.bug385738-4.7.2"
       label="jdt launching plugin with long classpath support for Eclipse 4.7.2"
-      version="7.0.0">
+      version="8.0.0">
 
    <description url="https://github.com/cchabanois/eclipse.jdt.debug">
       Contains a patched eclipse.jdt.launching plugin :
